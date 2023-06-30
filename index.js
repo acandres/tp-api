@@ -4,17 +4,21 @@ const inputs = document.querySelectorAll('input');
 
 function handleSubmit(e) {
   e.preventDefault();
-
-  const user = new FormData(form);
+  //const user = new FormData(form);
   //console.log(user.get("fullName"));
+  const data = Object.fromEntries(
+    new FormData(e.target) 
+  )
+  console.log(data)
+  /*
   const fullname = user.get("fullName");
   const mail = user.get("email");
   const phone = user.get("phone");
   const usuario = new User (fullname,mail,phone)
   console.log(usuario);
-
-  addOne(usuario);
-  modal.close();
+*/
+ addOne(data);
+//  modal.close();
 
 }
 const openModal = document.getElementById("open-modal");
@@ -48,31 +52,31 @@ function getAll(url) {
     this.phone = phone;
   }
 }
+
 //  #####   BORRADO DE UI y API  ###################
 //capturo el boton eliminar/editar  
 document.querySelector("#print-data").addEventListener('click' , function(e) {
- // alert ('borrando registro')
-//console.log(e.target.getAttribute("data-id"));
-console.log(e.target.getAttribute("name"))
-  if (e.target.getAttribute("name") === "delete"){
-    deleteUser(e.target); // borrado UI
-    deleteOne(e.target.getAttribute("data-id")); //borrado
-  } else {
-      if (e.target.getAttribute("name") === "edit"){
-         // modal.showModal();
-         modal.showModal();
-         fillModal(e.target.parentElement.parentElement.children);
-    }
-  } 
-   
+  //console.log(e.target.getAttribute("name"))
+    if (e.target.getAttribute("name") === "delete"){
+      // deleteUser(e.target); // borrado UI
+          deleteOne(e.target.getAttribute("data-id")); //borrado
+      } else {
+          if (e.target.getAttribute("name") === "edit"){
+            console.log('edit',e.target);
+            modal.showModal();
+            fillModal(e.target.parentElement.parentElement.children);
+          }
+      } 
 });
-
+/*
+// cuando era boludo y no entendia que debia recargar el listado luego de borrar un registro y no tocar el html usaba esta funcion, quedo bien igual 
 function deleteUser(element){
   if (element.name === "delete") {
     element.parentElement.parentElement.remove();
      
   }
 };
+*/
 
 function fillModal(user){
   let count = 0;
@@ -91,7 +95,7 @@ function addList(data) {
     const row = document.createElement('tr');
     row.innerHTML = `
     <td>${element.id}</td>
-    <td>${element.fullname}</td>
+    <td>${element.fullName}</td>
     <td>${element.email}</td>
     <td>${element.phone}</td>
     <td> <a href="#" class="button button-outline" data-id= ${element.id} name="delete">Delete</a> </td>
@@ -118,6 +122,7 @@ function deleteOne(id) {
   })
     .then(res => res.json())
     .then(data => console.log(data))
+    .then(()=>location.reload())
     .catch(err => console.error(err));
 }
 //add a new resource
@@ -127,6 +132,8 @@ const newUser = {
   phone: "(223) 232323223",
 };
 function addOne(user) {
+  console.log(user);
+  debugger;
   fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
