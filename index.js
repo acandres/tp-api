@@ -53,6 +53,18 @@ function getAll(url) {
   }
 }
 
+//logica button buscar
+
+document.getElementById('botonBusqueda').addEventListener('click',()=>{
+  const buscar = document.getElementById('buscar').value;
+  console.log(buscar);
+  const user = getOne(buscar);
+  console.log (user);
+  fillModal(user);
+})
+
+
+
 //  #####   BORRADO DE UI y API  ###################
 //capturo el boton eliminar/editar  
 document.querySelector("#print-data").addEventListener('click' , function(e) {
@@ -79,10 +91,12 @@ function deleteUser(element){
 */
 
 function fillModal(user){
-  let count = 0;
+ // modal.showModal();
+  let count = 1;
   for (let index of inputs){
-    count += 1
+    
     index.value = user[count].textContent
+    count += 1
   }
   
 }
@@ -133,7 +147,7 @@ const newUser = {
 };
 function addOne(user) {
   console.log(user);
-  debugger;
+ // debugger;
   fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
